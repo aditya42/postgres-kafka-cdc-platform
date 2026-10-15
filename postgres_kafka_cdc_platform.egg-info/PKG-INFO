@@ -1,0 +1,15 @@
+Metadata-Version: 2.4
+Name: postgres-kafka-cdc-platform
+Version: 1.0.0
+Summary: Production-style PostgreSQL CDC platform with Debezium, Kafka, Avro, S3 and Spark
+Requires-Python: >=3.11
+License-File: LICENSE
+Requires-Dist: boto3<2,>=1.35
+Requires-Dist: confluent-kafka<3,>=2.6
+Requires-Dist: psycopg[binary]<4,>=3.2
+Requires-Dist: requests<3,>=2.32
+Provides-Extra: dev
+Requires-Dist: pytest<9,>=8.3; extra == "dev"
+Requires-Dist: pytest-cov<7,>=6; extra == "dev"
+Requires-Dist: ruff<1,>=0.9; extra == "dev"
+Dynamic: license-file

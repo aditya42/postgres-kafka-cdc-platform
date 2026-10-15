@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -e '.[dev]'
+      - run: ruff check cdc_platform scripts tests
+      - run: python -m pytest tests/unit --cov=cdc_platform --cov-report=term-missing
+
+  config-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: pip install pyyaml
+      - run: |
+          python -m json.tool infra/connect/connectors/postgres-source.json >/dev/null
+          python -m json.tool infra/connect/connectors/s3-sink.json >/dev/null
+          python - <<'PY'
+          import pathlib, yaml
+          yaml.safe_load(pathlib.Path('docker-compose.yml').read_text())
+          PY
+        shell: bash

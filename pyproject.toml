@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "postgres-kafka-cdc-platform"
+version = "1.0.0"
+description = "Production-style PostgreSQL CDC platform with Debezium, Kafka, Avro, S3 and Spark"
+requires-python = ">=3.11"
+dependencies = [
+  "boto3>=1.35,<2",
+  "confluent-kafka>=2.6,<3",
+  "psycopg[binary]>=3.2,<4",
+  "requests>=2.32,<3",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3,<9",
+  "pytest-cov>=6,<7",
+  "ruff>=0.9,<1",
+]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+markers = [
+  "integration: requires the Docker Compose platform to be running",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.setuptools.packages.find]
+include = ["cdc_platform*", "scripts*"]
